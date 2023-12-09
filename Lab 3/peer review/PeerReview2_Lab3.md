@@ -19,7 +19,7 @@ def mutate(genome):
 ```
 
 ## Possible improvements
-I am of the opinion that incorporating various strategies to enhance diversity and expanding the generational scope could significantly improve outcomes. 
+I am of the opinion that incorporating various strategies with diversity and expanding the generational scope could significantly improve outcomes. 
 Moreover, the application of diversity promotion is likely to resolve problem instance 1 within the existing generation count.
 
 ## Ending
