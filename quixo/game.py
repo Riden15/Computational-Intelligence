@@ -26,6 +26,10 @@ class Player(ABC):
         '''
         pass
 
+    @abstractmethod
+    def give_rew(self,reward):
+        pass
+
 
 class Game(object):
     def __init__(self) -> None:
@@ -36,6 +40,71 @@ class Game(object):
         Returns the board
         '''
         return deepcopy(self._board)
+    
+    def set_board(self,b):
+        self._board = b
+
+    def get_hash_board(self):
+        return str(self._board.reshape(5*5))
+    
+    def reset(self):
+        self._board = np.ones((5, 5), dtype=np.uint8) * -1
+    
+    def get_possible_moves(self,player):
+        #possible moves:
+        # - take border empty and fill the hole by moving in the 3 directions
+        # - take one of your block on the border and fill the hole by moving in the 3 directions
+        #44 at start possible moves
+        pos = []
+        for r in [0,4]:
+            for c in range(4):
+                if self._board[c,r] == -1 or self._board[c,r] == player:
+                    if r==0 and c==0:
+                        pos.append(((c,r),Move.BOTTOM))
+                        pos.append(((c,r),Move.RIGHT))
+                    elif r==0 and c==4:
+                        pos.append(((c,r),Move.BOTTOM))
+                        pos.append(((c,r),Move.LEFT))
+                    elif r==4 and c==0:
+                        pos.append(((c,r),Move.TOP))
+                        pos.append(((c,r),Move.RIGHT))
+                    elif r==4 and c==0:
+                        pos.append(((c,r),Move.TOP))
+                        pos.append(((c,r),Move.LEFT))
+                    elif r==0:
+                        pos.append(((c,r),Move.BOTTOM))
+                        pos.append(((c,r),Move.LEFT))
+                        pos.append(((c,r),Move.RIGHT))
+                    else:
+                        pos.append(((c,r),Move.TOP))
+                        pos.append(((c,r),Move.LEFT))
+                        pos.append(((c,r),Move.RIGHT))
+        for c in [0,4]:
+            for r in range(4):
+                if self._board[c,r] == -1 or self._board[c,r] == player:
+                    if r==0 and c==0:
+                        pos.append(((c,r),Move.BOTTOM))
+                        pos.append(((c,r),Move.RIGHT))
+                    elif r==0 and c==4:
+                        pos.append(((c,r),Move.BOTTOM))
+                        pos.append(((c,r),Move.LEFT))
+                    elif r==4 and c==0:
+                        pos.append(((c,r),Move.TOP))
+                        pos.append(((c,r),Move.RIGHT))
+                    elif r==4 and c==0:
+                        pos.append(((c,r),Move.TOP))
+                        pos.append(((c,r),Move.LEFT))
+                    elif r==0:
+                        pos.append(((c,r),Move.BOTTOM))
+                        pos.append(((c,r),Move.LEFT))
+                        pos.append(((c,r),Move.RIGHT))
+                    else:
+                        pos.append(((c,r),Move.TOP))
+                        pos.append(((c,r),Move.LEFT))
+                        pos.append(((c,r),Move.RIGHT))
+
+        return pos
+
 
     def print(self):
         '''Prints the board. -1 are neutral pieces, 0 are pieces of player 0, 1 pieces of player 1'''
@@ -81,10 +150,50 @@ class Game(object):
             current_player_idx %= len(players)
             ok = False
             while not ok:
+                #from_pos is the position, for example [0,3]
+                #slide is one element of Move (top,left...)
+                from_pos, slide = players[current_player_idx].make_move(self)
+                ok = self.__move(from_pos, slide, current_player_idx)
+            players[current_player_idx].add_state(self.get_hash_board())
+            winner = self.check_winner()
+            if winner >= 0:
+                if winner == 0:
+                    player1.give_rew(1)
+                    player2.give_rew(0)
+                else:
+                    player1.give_rew(0)
+                    player2.give_rew(1)
+        return winner
+    
+    def test(self, player1: Player, player2: Player) -> int:
+        '''Play the game. Returns the winning player'''
+        players = [player1, player2]
+        current_player_idx = 1
+        winner = -1
+        while winner < 0:
+            current_player_idx += 1
+            current_player_idx %= len(players)
+            ok = False
+            while not ok:
+                #from_pos is the position, for example [0,3]
+                #slide is one element of Move (top,left...)
                 from_pos, slide = players[current_player_idx].make_move(self)
                 ok = self.__move(from_pos, slide, current_player_idx)
             winner = self.check_winner()
         return winner
+    
+    def move(self, from_pos: tuple[int, int], slide: Move, player_id: int) -> bool:
+        '''Perform a move'''
+        if player_id > 2:
+            return False
+        # Oh God, Numpy arrays
+        prev_value = deepcopy(self._board[(from_pos[1], from_pos[0])])
+        acceptable = self.__take((from_pos[1], from_pos[0]), player_id)
+        if acceptable:
+            acceptable = self.__slide((from_pos[1], from_pos[0]), slide)
+            if not acceptable:
+                self._board[(from_pos[1], from_pos[0])] = deepcopy(prev_value)
+        return acceptable
 
     def __move(self, from_pos: tuple[int, int], slide: Move, player_id: int) -> bool:
         '''Perform a move'''
