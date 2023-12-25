@@ -34,6 +34,7 @@ class Player(ABC):
 class Game(object):
     def __init__(self) -> None:
         self._board = np.ones((5, 5), dtype=np.uint8) * -1
+        self.current_player_idx = 1
 
     def get_board(self):
         '''
@@ -46,6 +47,12 @@ class Game(object):
 
     def get_hash_board(self):
         return str(self._board.reshape(5*5))
+
+    def get_current_player(self) -> int:
+        '''
+        Returns the current player
+        '''
+        return deepcopy(self.current_player_idx)
     
     def reset(self):
         self._board = np.ones((5, 5), dtype=np.uint8) * -1
