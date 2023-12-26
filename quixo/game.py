@@ -1,7 +1,9 @@
 from abc import ABC, abstractmethod
 from copy import deepcopy
 from enum import Enum
+
 import numpy as np
+
 
 # Rules on PDF
 
@@ -19,7 +21,7 @@ class Player(ABC):
         pass
 
     @abstractmethod
-    def make_move(self, game: 'Game') -> tuple[tuple[int, int], Move]:
+    def choose_action(self, game: 'Game') -> tuple[tuple[int, int], Move]:
         '''
         game: the Quixo game. You can use it to override the current game with yours, but everything is evaluated by the main game
         return values: this method shall return a tuple of X,Y positions and a move among TOP, BOTTOM, LEFT and RIGHT
@@ -27,91 +29,100 @@ class Player(ABC):
         pass
 
     @abstractmethod
-    def give_rew(self,reward):
+    def give_rew(self, reward):
         pass
 
 
 class Game(object):
     def __init__(self) -> None:
         self._board = np.ones((5, 5), dtype=np.uint8) * -1
-        self.current_player_idx = 1
+        self.current_player = 1
 
     def get_board(self):
-        '''
+        """
         Returns the board
-        '''
+        """
         return deepcopy(self._board)
-    
-    def set_board(self,b):
+
+    def set_board(self, b):
         self._board = b
 
     def get_hash_board(self):
-        return str(self._board.reshape(5*5))
+        return str(self._board.reshape(5 * 5))
+
+    def convert_matrix_board_to_tuple(self, board):
+        current_board = tuple(tuple(riga) for riga in board)
+        return current_board
 
     def get_current_player(self) -> int:
-        '''
+        """
         Returns the current player
-        '''
-        return deepcopy(self.current_player_idx)
-    
+        """
+        return deepcopy(self.current_player)
+
+    def switch_player(self):
+        if self.current_player == 1:
+            self.current_player = 0
+        else:
+            self.current_player = 1
+
     def reset(self):
         self._board = np.ones((5, 5), dtype=np.uint8) * -1
-    
-    def get_possible_moves(self,player):
-        #possible moves:
+
+    def get_possible_moves(self, player):
+        # possible moves:
         # - take border empty and fill the hole by moving in the 3 directions
-        # - take one of your block on the border and fill the hole by moving in the 3 directions
-        #44 at start possible moves
+        # - take one of your blocks on the border and fill the hole by moving in the 3 directions
+        # 44 at start possible moves
         pos = []
-        for r in [0,4]:
+        for r in [0, 4]:
             for c in range(4):
-                if self._board[c,r] == -1 or self._board[c,r] == player:
-                    if r==0 and c==0:
-                        pos.append(((c,r),Move.BOTTOM))
-                        pos.append(((c,r),Move.RIGHT))
-                    elif r==0 and c==4:
-                        pos.append(((c,r),Move.BOTTOM))
-                        pos.append(((c,r),Move.LEFT))
-                    elif r==4 and c==0:
-                        pos.append(((c,r),Move.TOP))
-                        pos.append(((c,r),Move.RIGHT))
-                    elif r==4 and c==0:
-                        pos.append(((c,r),Move.TOP))
-                        pos.append(((c,r),Move.LEFT))
-                    elif r==0:
-                        pos.append(((c,r),Move.BOTTOM))
-                        pos.append(((c,r),Move.LEFT))
-                        pos.append(((c,r),Move.RIGHT))
+                if self._board[c, r] == -1 or self._board[c, r] == player:
+                    if r == 0 and c == 0:
+                        pos.append(((c, r), Move.BOTTOM))
+                        pos.append(((c, r), Move.RIGHT))
+                    elif r == 0 and c == 4:
+                        pos.append(((c, r), Move.BOTTOM))
+                        pos.append(((c, r), Move.LEFT))
+                    elif r == 4 and c == 0:
+                        pos.append(((c, r), Move.TOP))
+                        pos.append(((c, r), Move.RIGHT))
+                    elif r == 4 and c == 0:
+                        pos.append(((c, r), Move.TOP))
+                        pos.append(((c, r), Move.LEFT))
+                    elif r == 0:
+                        pos.append(((c, r), Move.BOTTOM))
+                        pos.append(((c, r), Move.LEFT))
+                        pos.append(((c, r), Move.RIGHT))
                     else:
-                        pos.append(((c,r),Move.TOP))
-                        pos.append(((c,r),Move.LEFT))
-                        pos.append(((c,r),Move.RIGHT))
-        for c in [0,4]:
+                        pos.append(((c, r), Move.TOP))
+                        pos.append(((c, r), Move.LEFT))
+                        pos.append(((c, r), Move.RIGHT))
+        for c in [0, 4]:
             for r in range(4):
-                if self._board[c,r] == -1 or self._board[c,r] == player:
-                    if r==0 and c==0:
-                        pos.append(((c,r),Move.BOTTOM))
-                        pos.append(((c,r),Move.RIGHT))
-                    elif r==0 and c==4:
-                        pos.append(((c,r),Move.BOTTOM))
-                        pos.append(((c,r),Move.LEFT))
-                    elif r==4 and c==0:
-                        pos.append(((c,r),Move.TOP))
-                        pos.append(((c,r),Move.RIGHT))
-                    elif r==4 and c==0:
-                        pos.append(((c,r),Move.TOP))
-                        pos.append(((c,r),Move.LEFT))
-                    elif r==0:
-                        pos.append(((c,r),Move.BOTTOM))
-                        pos.append(((c,r),Move.LEFT))
-                        pos.append(((c,r),Move.RIGHT))
+                if self._board[c, r] == -1 or self._board[c, r] == player:
+                    if r == 0 and c == 0:
+                        pos.append(((c, r), Move.BOTTOM))
+                        pos.append(((c, r), Move.RIGHT))
+                    elif r == 0 and c == 4:
+                        pos.append(((c, r), Move.BOTTOM))
+                        pos.append(((c, r), Move.LEFT))
+                    elif r == 4 and c == 0:
+                        pos.append(((c, r), Move.TOP))
+                        pos.append(((c, r), Move.RIGHT))
+                    elif r == 4 and c == 0:
+                        pos.append(((c, r), Move.TOP))
+                        pos.append(((c, r), Move.LEFT))
+                    elif r == 0:
+                        pos.append(((c, r), Move.BOTTOM))
+                        pos.append(((c, r), Move.LEFT))
+                        pos.append(((c, r), Move.RIGHT))
                     else:
-                        pos.append(((c,r),Move.TOP))
-                        pos.append(((c,r),Move.LEFT))
-                        pos.append(((c,r),Move.RIGHT))
+                        pos.append(((c, r), Move.TOP))
+                        pos.append(((c, r), Move.LEFT))
+                        pos.append(((c, r), Move.RIGHT))
 
         return pos
-
 
     def print(self):
         '''Prints the board. -1 are neutral pieces, 0 are pieces of player 0, 1 pieces of player 1'''
@@ -133,142 +144,102 @@ class Game(object):
                 return self._board[0, y]
         # if a player has completed the principal diagonal
         if self._board[0, 0] != -1 and all(
-            [self._board[x, x]
-                for x in range(self._board.shape[0])] == self._board[0, 0]
+                [self._board[x, x]
+                 for x in range(self._board.shape[0])] == self._board[0, 0]
         ):
             # return the relative id
             return self._board[0, 0]
         # if a player has completed the secondary diagonal
         if self._board[0, -1] != -1 and all(
-            [self._board[x, -(x + 1)]
-             for x in range(self._board.shape[0])] == self._board[0, -1]
+                [self._board[x, -(x + 1)]
+                 for x in range(self._board.shape[0])] == self._board[0, -1]
         ):
             # return the relative id
             return self._board[0, -1]
         return -1
 
     def play(self, player1: Player, player2: Player) -> int:
-        '''Play the game. Returns the winning player'''
+        """Play the game. Returns the winning player"""
         players = [player1, player2]
-        current_player_idx = 1
+        current_player = 1
         winner = -1
         while winner < 0:
-            current_player_idx += 1
-            current_player_idx %= len(players)
+            current_player += 1
+            current_player %= len(players)
             ok = False
             while not ok:
-                #from_pos is the position, for example [0,3]
-                #slide is one element of Move (top,left...)
-                from_pos, slide = players[current_player_idx].make_move(self)
-                ok = self.__move(from_pos, slide, current_player_idx)
-            players[current_player_idx].add_state(self.get_hash_board())
-            winner = self.check_winner()
-            if winner >= 0:
-                if winner == 0:
-                    player1.give_rew(1)
-                    player2.give_rew(0)
-                else:
-                    player1.give_rew(0)
-                    player2.give_rew(1)
-        return winner
-    
-    def test(self, player1: Player, player2: Player) -> int:
-        '''Play the game. Returns the winning player'''
-        players = [player1, player2]
-        current_player_idx = 1
-        winner = -1
-        while winner < 0:
-            current_player_idx += 1
-            current_player_idx %= len(players)
-            ok = False
-            while not ok:
-                #from_pos is the position, for example [0,3]
-                #slide is one element of Move (top,left...)
-                from_pos, slide = players[current_player_idx].make_move(self)
-                ok = self.__move(from_pos, slide, current_player_idx)
+                # from_pos is the position, for example [0,3]
+                # slide is one element of Move (top,left...)
+                from_pos, slide = players[current_player].choose_action(self)
+                ok = self.make_move(from_pos, slide)
             winner = self.check_winner()
         return winner
-    
-    def move(self, from_pos: tuple[int, int], slide: Move, player_id: int) -> bool:
-        '''Perform a move'''
-        if player_id > 2:
-            return False
+
+    def make_move(self, from_pos: tuple[int, int], slide: Move) -> bool:
         # Oh God, Numpy arrays
         prev_value = deepcopy(self._board[(from_pos[1], from_pos[0])])
-        acceptable = self.__take((from_pos[1], from_pos[0]), player_id)
+        acceptable = self.take((from_pos[1], from_pos[0]))
         if acceptable:
-            acceptable = self.__slide((from_pos[1], from_pos[0]), slide)
+            acceptable = self.slide((from_pos[1], from_pos[0]), slide)
             if not acceptable:
                 self._board[(from_pos[1], from_pos[0])] = deepcopy(prev_value)
+        self.switch_player()
         return acceptable
 
-    def __move(self, from_pos: tuple[int, int], slide: Move, player_id: int) -> bool:
-        '''Perform a move'''
-        if player_id > 2:
-            return False
-        # Oh God, Numpy arrays
-        prev_value = deepcopy(self._board[(from_pos[1], from_pos[0])])
-        acceptable = self.__take((from_pos[1], from_pos[0]), player_id)
-        if acceptable:
-            acceptable = self.__slide((from_pos[1], from_pos[0]), slide)
-            if not acceptable:
-                self._board[(from_pos[1], from_pos[0])] = deepcopy(prev_value)
-        return acceptable
-
-    def __take(self, from_pos: tuple[int, int], player_id: int) -> bool:
-        '''Take piece'''
+    def take(self, from_pos: tuple[int, int]) -> bool:
+        """Take piece"""
         # acceptable only if in border
         acceptable: bool = (
-            # check if it is in the first row
-            (from_pos[0] == 0 and from_pos[1] < 5)
-            # check if it is in the last row
-            or (from_pos[0] == 4 and from_pos[1] < 5)
-            # check if it is in the first column
-            or (from_pos[1] == 0 and from_pos[0] < 5)
-            # check if it is in the last column
-            or (from_pos[1] == 4 and from_pos[0] < 5)
-            # and check if the piece can be moved by the current player
-        ) and (self._board[from_pos] < 0 or self._board[from_pos] == player_id)
+                               # check if it is in the first row
+                                   (from_pos[0] == 0 and from_pos[1] < 5)
+                                   # check if it is in the last row
+                                   or (from_pos[0] == 4 and from_pos[1] < 5)
+                                   # check if it is in the first column
+                                   or (from_pos[1] == 0 and from_pos[0] < 5)
+                                   # check if it is in the last column
+                                   or (from_pos[1] == 4 and from_pos[0] < 5)
+                               # and check if the piece can be moved by the current player
+                           ) and (self._board[from_pos] < 0 or self._board[from_pos] == self.current_player)
         if acceptable:
-            self._board[from_pos] = player_id
+            self._board[from_pos] = self.current_player
         return acceptable
 
-    def __slide(self, from_pos: tuple[int, int], slide: Move) -> bool:
-        '''Slide the other pieces'''
+    def slide(self, from_pos: tuple[int, int], slide: Move) -> bool:
+        """Slide the other pieces"""
         # define the corners
         SIDES = [(0, 0), (0, 4), (4, 0), (4, 4)]
         # if the piece position is not in a corner
         if from_pos not in SIDES:
             # if it is at the TOP, it can be moved down, left or right
             acceptable_top: bool = from_pos[0] == 0 and (
-                slide == Move.BOTTOM or slide == Move.LEFT or slide == Move.RIGHT
+                    slide == Move.BOTTOM or slide == Move.LEFT or slide == Move.RIGHT
             )
             # if it is at the BOTTOM, it can be moved up, left or right
             acceptable_bottom: bool = from_pos[0] == 4 and (
-                slide == Move.TOP or slide == Move.LEFT or slide == Move.RIGHT
+                    slide == Move.TOP or slide == Move.LEFT or slide == Move.RIGHT
             )
             # if it is on the LEFT, it can be moved up, down or right
             acceptable_left: bool = from_pos[1] == 0 and (
-                slide == Move.BOTTOM or slide == Move.TOP or slide == Move.RIGHT
+                    slide == Move.BOTTOM or slide == Move.TOP or slide == Move.RIGHT
             )
             # if it is on the RIGHT, it can be moved up, down or left
             acceptable_right: bool = from_pos[1] == 4 and (
-                slide == Move.BOTTOM or slide == Move.TOP or slide == Move.LEFT
+                    slide == Move.BOTTOM or slide == Move.TOP or slide == Move.LEFT
             )
         # if the piece position is in a corner
         else:
             # if it is in the upper left corner, it can be moved to the right and down
             acceptable_top: bool = from_pos == (0, 0) and (
-                slide == Move.BOTTOM or slide == Move.RIGHT)
+                    slide == Move.BOTTOM or slide == Move.RIGHT)
             # if it is in the lower left corner, it can be moved to the right and up
             acceptable_left: bool = from_pos == (4, 0) and (
-                slide == Move.TOP or slide == Move.RIGHT)
+                    slide == Move.TOP or slide == Move.RIGHT)
             # if it is in the upper right corner, it can be moved to the left and down
             acceptable_right: bool = from_pos == (0, 4) and (
-                slide == Move.BOTTOM or slide == Move.LEFT)
+                    slide == Move.BOTTOM or slide == Move.LEFT)
             # if it is in the lower right corner, it can be moved to the left and up
             acceptable_bottom: bool = from_pos == (4, 4) and (
-                slide == Move.TOP or slide == Move.LEFT)
+                    slide == Move.TOP or slide == Move.LEFT)
         # check if the move is acceptable
         acceptable: bool = acceptable_top or acceptable_bottom or acceptable_left or acceptable_right
         # if it is
