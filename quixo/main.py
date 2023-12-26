@@ -1,5 +1,6 @@
 import random
 from game import Game, Move, Player
+from QL_Player import QLPlayer, train, test
 from RL_Player import RLPlayer, train, test
 
 
@@ -22,20 +23,32 @@ class RandomPlayer(Player):
 if __name__ == '__main__':
     g = Game()
 
-    # Reinforcement Learning
-    alpha = 0.2
-    epsilon = 0.2
+    # Q-Learning
+    alpha = 0.1
+    epsilon = 0.3
     discount_factor = 0.9
-    epochs = 10000
+    epochs = 50000
     num_test_games = 1000
 
-    player1 = RLPlayer(player=0, alpha=alpha, epsilon=epsilon, discount_factor=discount_factor)
-    #player2 = RLPlayer(player=1, alpha=alpha, epsilon=epsilon, discount_factor=discount_factor)
+    #player1 = QLPlayer(player=0, alpha=alpha, epsilon=epsilon, discount_factor=discount_factor)
+    #player2 = QLPlayer(player=1, alpha=alpha, epsilon=epsilon, discount_factor=discount_factor)
     #Trainer_player1, Trained_player2 = train(player1, player2, g, epochs=epochs)
 
     #player1.save_policy('player1_QL')
     #player2.save_policy('player2_QL')
 
-    player1.load_policy('player1_QL')
+    #player1.load_policy('player1_QL')
+    #random_player = RandomPlayer()
+    #test(player1, random_player, num_test_games)
+
+    # Reinforcement Learning
+    player1 = RLPlayer(player=0, alpha=alpha, epsilon=epsilon, discount_factor=discount_factor)
+    player2 = RLPlayer(player=1, alpha=alpha, epsilon=epsilon, discount_factor=discount_factor)
+    Trainer_player1, Trained_player2 = train(player1, player2, g, epochs=epochs)
+
+    #player1.save_policy('player1_RL')
+    #player2.save_policy('player2_RL')
+
+    #player2.load_policy('player1_QL')
     random_player = RandomPlayer()
-    test(player1, random_player, num_test_games)
+    test(player2, random_player, num_test_games)

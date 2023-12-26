@@ -4,7 +4,7 @@ from game import Game, Move, Player
 from tqdm.auto import tqdm
 
 
-class RLPlayer(Player):
+class QLPlayer(Player):
     def __init__(self, player, alpha, epsilon, discount_factor) -> None:
         super().__init__()
         self.alpha = alpha
@@ -12,67 +12,67 @@ class RLPlayer(Player):
         self.discount_factor = discount_factor
         self.player = player
         self.states = []
-        self.state_value = {}
+        self.Q = {}
 
-    def add_state(self, state):
-        self.states.append(state)
+    def add_state(self, state, from_pos, slide):
+        self.states.append((state, (from_pos, slide)))
 
-    def get_state_value(self, state):
-        if state not in self.state_value:
-            self.state_value[state] = 0.0
-        return self.state_value[state]
+    def get_Q_value(self, state, from_pos, slide):
+        if (state, (from_pos, slide)) not in self.Q:
+            self.Q[(state, (from_pos, slide))] = 0.0
+        return self.Q[(state, (from_pos, slide))]
 
     def reset(self):
         self.states = []
 
     def choose_action(self, game: Game) -> tuple[tuple[int, int], Move]:
         available_moves = game.get_possible_moves(self.player)
+        Q_values = [self.get_Q_value(game.convert_matrix_board_to_tuple(game.get_board()), from_pos, slide) for
+                    from_pos, slide in available_moves]
+
         if random.uniform(0, 1) < self.epsilon:  # do exploration for 30% of the time
             return random.choice(available_moves)
         else:  # take the best one for 70% of the time
-            value_max = -999
-            for move in available_moves:
-                tmp = game.get_board()
-                game.make_move(move[0], move[1])
-                next_status = game.convert_matrix_board_to_tuple(game.get_board())
-                game.set_board(tmp)
-                value = 0 if self.state_value.get(next_status) is None else self.state_value.get(next_status)
-                if value > value_max:
-                    value_max = value
-                    action = move
-        return action
+            max_Q = max(Q_values)
+            if Q_values.count(max_Q) > 1:
+                best_moves = [i for i in range(len(available_moves)) if Q_values[i] == max_Q]
+                i = random.choice(best_moves)
+            else:
+                i = Q_values.index(max_Q)
+            return available_moves[i]
 
     def give_rew(self, reward):
         for st in reversed(self.states):
-            if self.state_value.get(st) is None:
-                self.state_value[st] = 0
-            current_q_value = self.state_value[st]
+            # st[0] = board state st[1][0] = from_pos st[1][1] = slice
+            current_q_value = self.Q[(st[0], (st[1][0], st[1][1]))]
             reward = current_q_value + self.alpha * (self.discount_factor * reward - current_q_value)
-            self.state_value[st] = reward
+            self.Q[(st[0], (st[1][0], st[1][1]))] = reward
 
     def save_policy(self, name):
         fw = open(name, 'wb')
-        pickle.dump(self.state_value, fw)
+        pickle.dump(self.Q, fw)
         fw.close()
 
     def load_policy(self, file):
         fr = open(file, 'rb')
-        self.state_value = pickle.load(fr)
+        self.Q = pickle.load(fr)
         fr.close()
 
 
-def train(p1: RLPlayer, p2: RLPlayer, game, epochs):
+def train(p1: QLPlayer, p2: QLPlayer, game, epochs):
     for epoch in tqdm(range(epochs)):
         game.reset()
         p1.reset()
         p2.reset()
+        state_board = game.convert_matrix_board_to_tuple(game.get_board())
         while game.check_winner() == -1:
             # Player 1
             ok = False
             while not ok:
                 from_pos, slide = p1.choose_action(game)
                 ok = game.make_move(from_pos, slide)
-            p1.add_state(game.convert_matrix_board_to_tuple(game.get_board()))
+            p1.add_state(state_board, from_pos, slide)
+            state_board = game.convert_matrix_board_to_tuple(game.get_board())
 
             win = game.check_winner()
             if win != -1:
@@ -89,7 +89,8 @@ def train(p1: RLPlayer, p2: RLPlayer, game, epochs):
                 while not ok:
                     from_pos, slide = p2.choose_action(game)
                     ok = game.make_move(from_pos, slide)
-                p2.add_state(game.convert_matrix_board_to_tuple(game.get_board()))
+                p2.add_state(state_board, from_pos, slide)
+                state_board = game.convert_matrix_board_to_tuple(game.get_board())
 
                 win = game.check_winner()
                 if win != -1:
@@ -102,7 +103,7 @@ def train(p1: RLPlayer, p2: RLPlayer, game, epochs):
     return p1, p2
 
 
-def test(rl_player: RLPlayer, random_player, num_games):
+def test(rl_player: QLPlayer, random_player, num_games):
     g = Game()
     player2_wins = 0
     games = 0
