@@ -99,6 +99,11 @@ def train(p1: RLPlayer, p2: RLPlayer, game, epochs):
                     else:
                         p1.give_rew(0)
                         p2.give_rew(1)
+        for chiave, valore in p1.state_value.items():
+            print(chiave, valore)
+        print(game.check_winner())
+        print(game.get_board())
+
     return p1, p2
 
 
