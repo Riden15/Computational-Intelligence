@@ -74,55 +74,54 @@ class Game(object):
         # - take border empty and fill the hole by moving in the 3 directions
         # - take one of your blocks on the border and fill the hole by moving in the 3 directions
         # 44 at start possible moves
-        pos = []
+        pos = set()
         for r in [0, 4]:
-            for c in range(4):
-                if self._board[c, r] == -1 or self._board[c, r] == player:
-                    if r == 0 and c == 0:
-                        pos.append(((c, r), Move.BOTTOM))
-                        pos.append(((c, r), Move.RIGHT))
-                    elif r == 0 and c == 4:
-                        pos.append(((c, r), Move.BOTTOM))
-                        pos.append(((c, r), Move.LEFT))
-                    elif r == 4 and c == 0:
-                        pos.append(((c, r), Move.TOP))
-                        pos.append(((c, r), Move.RIGHT))
-                    elif r == 4 and c == 0:
-                        pos.append(((c, r), Move.TOP))
-                        pos.append(((c, r), Move.LEFT))
-                    elif r == 0:
-                        pos.append(((c, r), Move.BOTTOM))
-                        pos.append(((c, r), Move.LEFT))
-                        pos.append(((c, r), Move.RIGHT))
-                    else:
-                        pos.append(((c, r), Move.TOP))
-                        pos.append(((c, r), Move.LEFT))
-                        pos.append(((c, r), Move.RIGHT))
+            for c in range(5):
+                if self._board[r, c] == -1 or self._board[r, c] == player:
+                    if r == 0 and c == 0: #OK
+                        pos.add(((c, r), Move.BOTTOM))
+                        pos.add(((c, r), Move.RIGHT))
+                    elif r == 0 and c == 4: #OK
+                        pos.add(((c, r), Move.BOTTOM))
+                        pos.add(((c, r), Move.LEFT))
+                    elif r == 4 and c == 0: #OK
+                        pos.add(((c, r), Move.TOP))
+                        pos.add(((c, r), Move.RIGHT))
+                    elif r == 4 and c == 4: #OK
+                        pos.add(((c, r), Move.TOP))
+                        pos.add(((c, r), Move.LEFT))
+                    elif r == 0: #OK
+                        pos.add(((c, r), Move.BOTTOM))
+                        pos.add(((c, r), Move.LEFT))
+                        pos.add(((c, r), Move.RIGHT))
+                    elif r == 4: #OK
+                        pos.add(((c, r), Move.TOP))
+                        pos.add(((c, r), Move.LEFT))
+                        pos.add(((c, r), Move.RIGHT))
         for c in [0, 4]:
-            for r in range(4):
-                if self._board[c, r] == -1 or self._board[c, r] == player:
-                    if r == 0 and c == 0:
-                        pos.append(((c, r), Move.BOTTOM))
-                        pos.append(((c, r), Move.RIGHT))
-                    elif r == 0 and c == 4:
-                        pos.append(((c, r), Move.BOTTOM))
-                        pos.append(((c, r), Move.LEFT))
-                    elif r == 4 and c == 0:
-                        pos.append(((c, r), Move.TOP))
-                        pos.append(((c, r), Move.RIGHT))
-                    elif r == 4 and c == 0:
-                        pos.append(((c, r), Move.TOP))
-                        pos.append(((c, r), Move.LEFT))
-                    elif r == 0:
-                        pos.append(((c, r), Move.BOTTOM))
-                        pos.append(((c, r), Move.LEFT))
-                        pos.append(((c, r), Move.RIGHT))
-                    else:
-                        pos.append(((c, r), Move.TOP))
-                        pos.append(((c, r), Move.LEFT))
-                        pos.append(((c, r), Move.RIGHT))
-
-        return pos
+            for r in range(5):
+                if self._board[r, c] == -1 or self._board[r, c] == player:
+                    if r == 0 and c == 0: #OK
+                        pos.add(((c, r), Move.BOTTOM))
+                        pos.add(((c, r), Move.RIGHT))
+                    elif r == 0 and c == 4: #OK
+                        pos.add(((c, r), Move.BOTTOM))
+                        pos.add(((c, r), Move.LEFT))
+                    elif r == 4 and c == 0: #OK
+                        pos.add(((c, r), Move.TOP))
+                        pos.add(((c, r), Move.RIGHT))
+                    elif r == 4 and c == 4: #OK
+                        pos.add(((c, r), Move.TOP))
+                        pos.add(((c, r), Move.LEFT))
+                    elif c == 0: 
+                        pos.add(((c, r), Move.TOP))
+                        pos.add(((c, r), Move.RIGHT))
+                        pos.add(((c, r), Move.BOTTOM))
+                    elif c == 4:
+                        pos.add(((c, r), Move.TOP))
+                        pos.add(((c, r), Move.LEFT))
+                        pos.add(((c, r), Move.BOTTOM))
+        return list(pos)
 
     def print(self):
         '''Prints the board. -1 are neutral pieces, 0 are pieces of player 0, 1 pieces of player 1'''
@@ -161,16 +160,16 @@ class Game(object):
     def play(self, player1: Player, player2: Player) -> int:
         """Play the game. Returns the winning player"""
         players = [player1, player2]
-        current_player = 1
+        self.current_player = 1
         winner = -1
         while winner < 0:
-            current_player += 1
-            current_player %= len(players)
+            self.current_player += 1
+            self.current_player %= len(players)
             ok = False
             while not ok:
                 # from_pos is the position, for example [0,3]
                 # slide is one element of Move (top,left...)
-                from_pos, slide = players[current_player].choose_action(self)
+                from_pos, slide = players[self.current_player].choose_action(self)
                 ok = self.make_move(from_pos, slide)
             winner = self.check_winner()
         return winner
@@ -183,7 +182,6 @@ class Game(object):
             acceptable = self.slide((from_pos[1], from_pos[0]), slide)
             if not acceptable:
                 self._board[(from_pos[1], from_pos[0])] = deepcopy(prev_value)
-        self.switch_player()
         return acceptable
 
     def take(self, from_pos: tuple[int, int]) -> bool:

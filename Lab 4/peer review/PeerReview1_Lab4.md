@@ -11,6 +11,8 @@ I also discovered that it's possible to print the board using some emoji for ❌
 really well, I will definitely use it in the future 😏.
 
 ## Code
+While reading the code, I just noticed a small typo that's also quite irrelevant but anyway, in the ``_game_reward`` 
+method you write that the player is a `TicTacToe` class instead of a `QLearningRLPlayer`.
 
 Since you use the state in the form of a string as the dictionary key, it took me a while to understand the whole process 
 between wanting to change the -1 to 2 of the board state in `_map_state_to_index` to the various reshapes in `_make_move`
