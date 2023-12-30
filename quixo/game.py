@@ -78,42 +78,42 @@ class Game(object):
         for r in [0, 4]:
             for c in range(5):
                 if self._board[r, c] == -1 or self._board[r, c] == player:
-                    if r == 0 and c == 0: #OK
+                    if r == 0 and c == 0:  # OK
                         pos.add(((c, r), Move.BOTTOM))
                         pos.add(((c, r), Move.RIGHT))
-                    elif r == 0 and c == 4: #OK
+                    elif r == 0 and c == 4:  # OK
                         pos.add(((c, r), Move.BOTTOM))
                         pos.add(((c, r), Move.LEFT))
-                    elif r == 4 and c == 0: #OK
+                    elif r == 4 and c == 0:  # OK
                         pos.add(((c, r), Move.TOP))
                         pos.add(((c, r), Move.RIGHT))
-                    elif r == 4 and c == 4: #OK
+                    elif r == 4 and c == 4:  # OK
                         pos.add(((c, r), Move.TOP))
                         pos.add(((c, r), Move.LEFT))
-                    elif r == 0: #OK
+                    elif r == 0:  # OK
                         pos.add(((c, r), Move.BOTTOM))
                         pos.add(((c, r), Move.LEFT))
                         pos.add(((c, r), Move.RIGHT))
-                    elif r == 4: #OK
+                    elif r == 4:  # OK
                         pos.add(((c, r), Move.TOP))
                         pos.add(((c, r), Move.LEFT))
                         pos.add(((c, r), Move.RIGHT))
         for c in [0, 4]:
             for r in range(5):
                 if self._board[r, c] == -1 or self._board[r, c] == player:
-                    if r == 0 and c == 0: #OK
+                    if r == 0 and c == 0:  # OK
                         pos.add(((c, r), Move.BOTTOM))
                         pos.add(((c, r), Move.RIGHT))
-                    elif r == 0 and c == 4: #OK
+                    elif r == 0 and c == 4:  # OK
                         pos.add(((c, r), Move.BOTTOM))
                         pos.add(((c, r), Move.LEFT))
-                    elif r == 4 and c == 0: #OK
+                    elif r == 4 and c == 0:  # OK
                         pos.add(((c, r), Move.TOP))
                         pos.add(((c, r), Move.RIGHT))
-                    elif r == 4 and c == 4: #OK
+                    elif r == 4 and c == 4:  # OK
                         pos.add(((c, r), Move.TOP))
                         pos.add(((c, r), Move.LEFT))
-                    elif c == 0: 
+                    elif c == 0:
                         pos.add(((c, r), Move.TOP))
                         pos.add(((c, r), Move.RIGHT))
                         pos.add(((c, r), Move.BOTTOM))
@@ -173,6 +173,107 @@ class Game(object):
                 ok = self.make_move(from_pos, slide)
             winner = self.check_winner()
         return winner
+
+    def possible_initial_moves(self):
+
+        return [((0, 0), Move.BOTTOM),
+                ((0, 0), Move.RIGHT),
+                ((0, 1), Move.BOTTOM),
+                ((0, 1), Move.LEFT),
+                ((0, 1), Move.RIGHT),
+                ((0, 2), Move.BOTTOM),
+                ((0, 2), Move.LEFT),
+                ((0, 2), Move.RIGHT),
+                ((0, 3), Move.BOTTOM),
+                ((0, 3), Move.LEFT),
+                ((0, 3), Move.RIGHT),
+                ((0, 4), Move.BOTTOM),
+                ((0, 4), Move.LEFT),
+                ((1, 0), Move.TOP),
+                ((1, 0), Move.BOTTOM),
+                ((1, 0), Move.RIGHT),
+                ((1, 4), Move.TOP),
+                ((1, 4), Move.BOTTOM),
+                ((1, 4), Move.LEFT),
+                ((2, 0), Move.TOP),
+                ((2, 0), Move.BOTTOM),
+                ((2, 0), Move.RIGHT),
+                ((2, 4), Move.TOP),
+                ((2, 4), Move.BOTTOM),
+                ((2, 4), Move.LEFT),
+                ((3, 0), Move.TOP),
+                ((3, 0), Move.BOTTOM),
+                ((3, 0), Move.RIGHT),
+                ((3, 4), Move.TOP),
+                ((3, 4), Move.BOTTOM),
+                ((3, 4), Move.LEFT),
+                ((4, 0), Move.TOP),
+                ((4, 0), Move.RIGHT),
+                ((4, 1), Move.TOP),
+                ((4, 1), Move.LEFT),
+                ((4, 1), Move.RIGHT),
+                ((4, 2), Move.TOP),
+                ((4, 2), Move.LEFT),
+                ((4, 2), Move.RIGHT),
+                ((4, 3), Move.TOP),
+                ((4, 3), Move.LEFT),
+                ((4, 3), Move.RIGHT),
+                ((4, 4), Move.TOP),
+                ((4, 4), Move.LEFT)]
+
+    def possible_initial_moves2(self):
+        positions = [(i, j) for i in range(5) for j in range(5)]
+        moves = [Move.TOP, Move.BOTTOM, Move.LEFT, Move.RIGHT]
+        SIDES = [(0, 0), (0, 4), (4, 0), (4, 4)]
+        results = []
+        for position in positions:
+            for move in moves:
+                acceptable: bool = (
+                    # check if it is in the first row
+                        (position[0] == 0 and position[1] < 5)
+                        # check if it is in the last row
+                        or (position[0] == 4 and position[1] < 5)
+                        # check if it is in the first column
+                        or (position[1] == 0 and position[0] < 5)
+                        # check if it is in the last column
+                        or (position[1] == 4 and position[0] < 5))
+                if acceptable:
+                    if position not in SIDES:
+                        # if it is at the TOP, it can be moved down, left or right
+                        acceptable_top: bool = position[0] == 0 and (
+                                move == Move.BOTTOM or move == Move.LEFT or move == Move.RIGHT
+                        )
+                        # if it is at the BOTTOM, it can be moved up, left or right
+                        acceptable_bottom: bool = position[0] == 4 and (
+                                move == Move.TOP or move == Move.LEFT or move == Move.RIGHT
+                        )
+                        # if it is on the LEFT, it can be moved up, down or right
+                        acceptable_left: bool = position[1] == 0 and (
+                                move == Move.BOTTOM or move == Move.TOP or move == Move.RIGHT
+                        )
+                        # if it is on the RIGHT, it can be moved up, down or left
+                        acceptable_right: bool = position[1] == 4 and (
+                                move == Move.BOTTOM or move == Move.TOP or move == Move.LEFT
+                        )
+                    # if the piece position is in a corner
+                    else:
+                        # if it is in the upper left corner, it can be moved to the right and down
+                        acceptable_top: bool = position == (0, 0) and (
+                                move == Move.BOTTOM or move == Move.RIGHT)
+                        # if it is in the lower left corner, it can be moved to the right and up
+                        acceptable_left: bool = position == (4, 0) and (
+                                move == Move.TOP or move == Move.RIGHT)
+                        # if it is in the upper right corner, it can be moved to the left and down
+                        acceptable_right: bool = position == (0, 4) and (
+                                move == Move.BOTTOM or move == Move.LEFT)
+                        # if it is in the lower right corner, it can be moved to the left and up
+                        acceptable_bottom: bool = position == (4, 4) and (
+                                move == Move.TOP or move == Move.LEFT)
+                    # check if the move is acceptable
+                    acceptable: bool = acceptable_top or acceptable_bottom or acceptable_left or acceptable_right
+                    if acceptable:
+                        results.append((position, move))
+        return results
 
     def make_move(self, from_pos: tuple[int, int], slide: Move) -> bool:
         # Oh God, Numpy arrays
