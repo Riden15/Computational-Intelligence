@@ -7,23 +7,22 @@
 
 # Table of Contents
 
-1. Report Organization
-2. [Lab 01 — Set Covering](#lab-01--set-covering)
-3. [Lab 02 — Nim Game](#lab-02--nim-game)
-4. [Lab 03 — Black Box Problem](#lab-03--black-box-problem)
-5. [Lab 04 — Reinforcement Learning](#lab-04--reinforcement-learning)
-6. [Halloween Challenge](#halloween-challenge)
-7. Final Project
-8. [Reviews](#reviews)
+1. [Lab 01 — Set Covering](#lab-01--set-covering)
+2. [Lab 02 — Nim Game](#lab-02--nim-game)
+3. [Lab 03 — Black Box Problem](#lab-03--black-box-problem)
+4. [Lab 04 — Reinforcement Learning](#lab-04--reinforcement-learning)
+5. [Halloween Challenge](#halloween-challenge)
+6. Final Project
+7. [Reviews](#reviews)
    1. [Lab 02](#lab-02)
       1. [Done](#done)
       2. [Received](#received)
-   2. Lab 03
-      1. Done
-      2. Received
-   3. Lab 04
-      1. Done
-      2. Received
+   2. [Lab 03](#lab-03)
+      1. [Done](#done-1)
+      2. [Received](#received-1)
+   3. [Lab 04](#lab-04)
+      1. [Done](#done-2)
+      2. [Received](#received-2)
 
 <div class="page"/>
 
@@ -1838,12 +1837,12 @@ print((fitness(solution), fitness_counter))
 
 ### Done
 
-**[Peer review](https://github.com/HerryTheBest/Polito---Computational-Intelligence/issues/2) for Lab 2 of [Luca Sturaro s320062](https://github.com/HerryTheBest/Polito---Computational-Intelligence/tree/main/Lab_2)**
+1. **[Peer review](https://github.com/HerryTheBest/Polito---Computational-Intelligence/issues/2) for Lab 2 of [Luca Sturaro s320062](https://github.com/HerryTheBest/Polito---Computational-Intelligence/tree/main/Lab_2)**
 
 
 > Hi Luca ✌️.
 > 
-> First of all, it would have been easier to evaluate the code if the README.md file had included some information about
+> First of all, it would have been easier to evaluate the code if the ``README.md`` file had included some information about
 > your ES. For example, describe the association between the percentage parameter and the choice of row in ``evolutionary_strategy_1``. 
 > It seems to me that a low percentage corresponds to prefer the first rows and a high percentage corresponds to prefer the last rows. 
 > 
@@ -1876,7 +1875,7 @@ print((fitness(solution), fitness_counter))
 > ### Ending
 > I hope you'll find this review useful and good luck for the next labs 😉!
 
-**[Peer review](https://github.com/AlessioCappello2/computational-intelligence/issues/2) for Lab 2 of [Alessio Cappello s309450](https://github.com/AlessioCappello2/computational-intelligence/tree/main/labs)**
+2. **[Peer review](https://github.com/AlessioCappello2/computational-intelligence/issues/2) for Lab 2 of [Alessio Cappello s309450](https://github.com/AlessioCappello2/computational-intelligence/tree/main/labs)**
 
 > Hi Alessio ✌️.
 > 
@@ -1898,7 +1897,7 @@ print((fitness(solution), fitness_counter))
 
 ### Received
 
-**[Peer review](https://github.com/Riden15/Computational-Intelligence/issues/1) for Lab 2 received by [Luca Sturaro s320062](https://github.com/HerryTheBest/Polito---Computational-Intelligence)**
+1. **[Peer review](https://github.com/Riden15/Computational-Intelligence/issues/1) for Lab 2 received by [Luca Sturaro s320062](https://github.com/HerryTheBest/Polito---Computational-Intelligence)**
 
 > ### Intro
 > As a general note, the code is well laid out and the comments make it quite straight forward to follow, only the make_move function in the NimAgent class could have used some more clarification for how the choice is actually made.
@@ -1917,7 +1916,7 @@ print((fitness(solution), fitness_counter))
 > ### Conclusion
 > I hope you'll find these comments helpful.
 
-**[Peer review](https://github.com/Riden15/Computational-Intelligence/issues/2) for Lab 2 received by [Lorenzo Ugoccioni s315734](https://github.com/LorenzoUgo/Computational_Intelligence)**
+2. **[Peer review](https://github.com/Riden15/Computational-Intelligence/issues/2) for Lab 2 received by [Lorenzo Ugoccioni s315734](https://github.com/LorenzoUgo/Computational_Intelligence)**
 
 > Hi Riccardo,
 > 
@@ -1929,3 +1928,185 @@ print((fitness(solution), fitness_counter))
 >That said, given that throughout the development of the algorithm you also get to win more than 60 % of games against the optimal, I think the definition of the move and its choice are really effective.
 >
 > Enjoy Lab9.
+
+<div class="page"/>
+
+## Lab 03
+
+### Done
+
+1. **[Peer review](https://github.com/lorenzobn/computational_intelligence/issues/5) for Lab 3 of [Lorenzo Bonannella s317985](https://github.com/lorenzobn/computational_intelligence/tree/main/lab_09)**
+
+> Hi Lorenzo ✌️.
+>
+> Firstly, good work👍🏻!
+> The code is clear, easy to read and also well-structured.
+> It's also a complete code because you have tried a lot of solutions for this problem, nice! 
+>
+> It would have been more comfortable anyway to evaluate the code if the `README.md`
+> file had included some information about it or also with some comments, they are always nice to have.
+>
+> However, the results section is very well written, also describing the choices made while writing the code.
+>
+> ### Code
+> The base EA algorithm is well implemented, so nothing to say about it, well done!
+>
+> Also for the Diversity, you have gone a great work choosing parents based on how different they are, a nice idea!
+>
+> ### Ending
+> I hope you'll find this review useful and good luck for the next labs 😉!
+
+2. **[Peer review](https://github.com/YaldaMobargha/Computational-intelligence/issues/3) for Lab 3 of [Yalda sadat Mobargha s314700](https://github.com/YaldaMobargha/Computational-intelligence/tree/main/Labs/9)**
+
+> Hi Yalda ✌️.
+> Firstly, good job👍🏻! Very good also to have added the `README.md` file, it is very useful for immediately 
+> understanding the work done without going into detail.
+> The code is pretty simple to read, however, you could use some comments, they are always nice to have.
+>
+> ### Code
+> The code you committed doesn't run due to a small error in the `mutate` function. 
+> From what I understand, you invert a random individual of the given input population.
+> If you change your genome from a tuple to a simple array and change the function mutate like this, it should work:
+> ```python
+> def mutate(genome):
+>    index = randint(0, NUM_LOCI-1)
+>    genome[index] = 1-genome[index]
+>    return genome
+> ```
+> ### Possible improvements
+> I am of the opinion that incorporating various strategies with diversity and expanding the generational scope could significantly improve outcomes. 
+> Moreover, the application of diversity promotion is likely to resolve problem instance 1 within the existing generation count.
+>
+> ### Ending
+> I hope you'll find this review useful and good luck for the next labs 😉!
+
+### Received
+
+1. **[Peer review](https://github.com/Riden15/Computational-Intelligence/issues/3) for Lab 3 received by [Davide Vitabile s330509](https://github.com/Vitabile/Computational-Intelligence)**
+
+> Hi Riccardo!
+>
+> First of all I'd like to compliment you on the work you've done, the code is clear and easy to read. It is also compact and with clear comments. Your implementation of a simple genetic algorithm is well done.
+>
+> Unfortunately, you don't succeed in solving any instance of the problem, to get better results I would give you some advice.
+>
+> First, you use a larger population than I did, and a very low number of generations. Of course you need to increase the number of generations to get better results, and you could decrease the number of populations to keep the computational cost acceptable.
+>
+> Second, with a simple genetic algorithm, you can solve problem instance 1, and maybe the second. But to improve your score for problem instances 5 and 10, you need some implementation of promoting diversity. The simplest and easiest I suggest is extinction, but there are other techniques that the professor has explained, you can test what ever you want.
+>
+> All in all, good job and good luck for the next lab!
+
+2. **[Peer review](https://github.com/Riden15/Computational-Intelligence/issues/4) for Lab 3 received by [Davide Sferrazza s326619](https://github.com/FarInHeight/Computational-Intelligence)**
+
+> Hello 👋🏻, Riccardo!
+>
+> Your notebook is well done. Each section is well documented and the code is easy to read.
+>
+> ### Code analysis
+> While reading your code I just noticed a small typo in the select_parent and replacement functions. They take the fitness function as an argument, even though it is never used.
+>
+> One thing that I really want to highlight is the code that you use to keep track of the best individual among all generations (mentioned below).
+> ```python
+> if pop[0][1] > best:
+>    best = pop[0][1]
+>    n_calls = fit.calls
+>    gen = g
+> ```
+> In this case you are also keeping track of the fitness calls made up to this moment, so it is for the generation number.
+> I didn't think of this when I implemented my solution. Great insight 💡!
+> I think I'll use this idea for my future labs.
+>
+> ### Possible improvements
+> I believe that by implementing some diversity promotion techniques and by increasing the number of generations you should be able to get much better results.
+> Also, by using diversity promotion you will probably be able to solve problem instance 1 with the same number of generations.
+>
+> ### Conclusions
+> All in all, good work 😉💪🏻!
+> 
+>I hope you'll find this review useful and good luck for the next labs 🍀😉!
+
+3. **[Peer review](https://github.com/Riden15/Computational-Intelligence/issues/5) for Lab 3 received by [Florentin-Cristian Udrea (S319029)](https://github.com/florentin1304/computational-intelligence)**
+
+> Hi Riccardo,
+>
+> I really liked the way you structured your code, it is very clean and understandable.
+> The solution works, and that's good, but I feel you could've added some more to it. At the moment you don't deal with local optimums in any way. One simple way > may be by studying population diversity. If you are in a local optima that you can't escape your population will cease to be diverse, and will converge to the same individual. In that case you could stop early your simulation and save some fitness calls.
+>
+>I hope I was helpful!
+
+<div class="page"/>
+
+## Lab 04
+
+### Done
+
+1. **[Peer review](https://github.com/FarInHeight/Computational-Intelligence/issues/3) for Lab 4 of [Davide Sferrazza s326619](https://github.com/FarInHeight/Computational-Intelligence/tree/main/lab10)**
+
+> Hi Davide ✌️.
+>
+> Firstly, good job 👍🏻! Each function is well documented and the code is easy to read. Your players also seem unbeatable, nice!
+> Also, nice job on adding to practically every single line in the notebook a little comment to describe what's happening, 
+> it gave me a huge help in understanding the code and therefore saved me some time.
+> I also discovered that it's possible to print the board using some emoji for ❌ and ⭕️ and I must say that it turns out 
+> really well, I will definitely use it in the future 😏.
+>
+> ### Code
+>
+> While reading the code, I just noticed a small typo that's also quite irrelevant but anyway, in the ``_game_reward`` 
+> method you write that the player is a `TicTacToe` class instead of a `QLearningRLPlayer`.
+>
+> Since you use the state in the form of a string as the dictionary key, it took me a while to understand the whole process 
+> between wanting to change the -1 to 2 of the board state in `_map_state_to_index` to the various reshapes in `_make_move`
+> and immediately after to get the `action`. I personally find working with strings quite uncomfortable and often not very
+> intuitive, which is why I opted to transform the board matrix into a tuple of tuples and use it as a key. For example, a matrix 
+> [[1,0,0], [0,1,0], [0,0,1]] will become ((1,0,0), (0,1,0), (0,0,1)). In this way, in my opinion, it is slightly easier 
+> to work with and also more intuitive.
+> 
+> Changing the exploration rate at each epoch is also excellent. I think this step improves the player and not just a little. 
+> I hadn't really thought of this, so thank you very much for this addition, I will definitely use it for the project.
+> 
+> ### Ending
+> I hope you'll find this review useful and good luck for the project 😉!
+
+2. **[Peer review](https://github.com/ArmanBehkish/computational-intelligence_2324/issues/4) for Lab 4 of [Arman Behkish s299525](https://github.com/ArmanBehkish/computational-intelligence_2324/tree/master/2023-24/LAB%2010)**
+
+> Hi Arman ✌️.
+>
+> Firstly, good work 👍🏻! You have written a nice and working RL algorithm.
+> The code is also well written, you added a small description to each function plus some comments in the code. 
+> This is always well appreciated. You also added a `README` file which explains the strategy used very well so excellent!
+> To make it even more complete, you could have added some results that you obtained while testing your algorithm.
+>
+> ### Code
+> To improve your algorithm I can offer you a couple of ideas:
+> 1. I don't know how many different learning rates you've tried, but it's definitely a good starting point 
+> to start testing your algorithm with different values and see if anything changes.
+> 2. What can give a big boost to the algorithm is to add more state exploration. The simplest thing that could be done 
+> is to ensure that during training there is a probability (maybe 20% or 30%) that the algorithm chooses a random move 
+> instead of consulting the `value_dictionary`. To improve even more, you could make the exploration rate start from 1 
+> and lower more and more as the epochs increase.
+> 3. Lastly, you could try adding the discount factor to the Bellman equation. The discount factor essentially determines 
+> how much the reinforcement learning agents care about rewards in the distant future relative to those in the immediate future.
+> With this, the formula will be:
+> ```python
+> value_dictionary[hashable_state] = value_dictionary[hashable_state] + epsilon * (discount_factor * final_reward - value_dictionary[hashable_state])
+> ```
+>
+> ### Ending
+> I hope you'll find this review useful and good luck for the project 😉!
+
+### Received
+
+1. **[Peer review](https://github.com/Riden15/Computational-Intelligence/issues/6) for Lab 4 received by [Alessandro De Marco s317626](https://github.com/Aleedm/computational-intelligence)**
+
+> Hi Riccardo!
+> 
+> I've reviewed both of your Tic Tac Toe implementations using reinforcement learning, and I'm impressed by the thoroughness and clarity of your approaches.
+>
+> In the first implementation, the TicTacToe class and RLPlayer demonstrate a well-structured design, clearly delineating the roles of the game environment and the learning agent. The use of a reward system that differentiates between wins, losses, and ties is a smart way to encourage more strategic play from the agents. The training process, leveraging two RL agents against each other, is a solid approach to ensure robust learning. Testing against a random player is a great way to validate the learned strategies. It would be interesting to see how the agents perform against more sophisticated opponents or even human players.
+>
+> The second implementation, focusing on Q-learning, offers a different but equally compelling approach. The QLearningAgent class neatly encapsulates the Q-learning algorithm, and the use of a dictionary for state-action pairs is a good choice for this problem. The training and testing functions are well implemented, providing a clear view of how the agents learn over time. The hyperparameter choices, especially the number of epochs, indicate a deep training process, which should ideally lead to a well-trained model. It would be helpful to have some insights into how these hyperparameters were chosen and tuned.
+>
+> In both cases, your implementations demonstrate a clear understanding of reinforcement learning concepts applied to a classic game. The structure of your code and the use of classes make the projects readable and maintainable. One suggestion for improvement would be to include more in-depth analysis of the agents' performance over time, such as how quickly they learn or their performance against different types of opponents. This could provide more insights into the strengths and weaknesses of your approaches.
+>
+> Overall, excellent work on both approaches
