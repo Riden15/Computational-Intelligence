@@ -14,16 +14,18 @@
 5. [Lab 04 — Reinforcement Learning](#lab-04--reinforcement-learning)
 6. [Halloween Challenge](#halloween-challenge)
 7. Final Project
-8. Reviews
-   1. Lab 02
-      1. Done
-      2. Received
+8. [Reviews](#reviews)
+   1. [Lab 02](#lab-02)
+      1. [Done](#done)
+      2. [Received](#received)
    2. Lab 03
       1. Done
       2. Received
    3. Lab 04
       1. Done
       2. Received
+
+<div class="page"/>
 
 # Lab 01 — Set Covering
 
@@ -286,6 +288,7 @@ with tqdm(total=None) as pbar:
 
 print(f"Solved in {counter:,} steps ({len(current_state.taken)} tiles)")
 ```
+<div class="page"/>
 
 # Lab 02 — Nim Game
 Nim is a game in which two players take turns removing objects from distinct rows. On each turn, a player must remove at least one object, and may remove any number of objects provided they all come from the same row. 
@@ -695,6 +698,9 @@ logging.info(f"status: Player {player} won!")
     INFO:root:status: <0 0 0 0 0>
     INFO:root:status: Player 1 won!
     
+
+<div class="page"/>
+
 # Lab 03 — Black Box Problem
 Write a local-search algorithm (eg. an EA) able to solve the *Problem* instances 1, 2, 5, and 10 on a 1000-loci genomes, using a minimum number of fitness calls. That's all.
 
@@ -908,7 +914,9 @@ for ps in problem_size:
     Fitness calls: 248500
     Generation: 495
     Population size: 500
-    
+
+<div class="page"/>
+
 # Lab 04 — Reinforcement Learning
 Given the Tic Tac Toe game we create two players, one with Reinforcement Learning and another with Q-learning.
 
@@ -1625,7 +1633,9 @@ print(f"Wins + Draws percentage: {(num_wins + num_draws) / num_games * 100}")
 
     Over 1000 matches: 911 wins, 47 losses, 42 draws
     Wins + Draws percentage: 95.3
-    
+
+<div class="page"/>
+
 # Halloween challenge
 
 Find the best solution with the fewest calls to the fitness functions for:
@@ -1820,48 +1830,102 @@ for i in range (N_Restart):
 print((fitness(solution), fitness_counter))
 ```
 
+<div class="page"/>
+
 # Reviews
 
 ## Lab 02
 
 ### Done
 
-Peer review for Lab 2 of [Luca Sturaro s320062](https://github.com/HerryTheBest/Polito---Computational-Intelligence/tree/main/Lab_2)
-
-# Intro
-Hi Luca.
-
-First of all, it would have been easier to evaluate the code if the README.md file had included some information about
-your ES. For example, describe the association between the percentage parameter and the choice of row in ``evolutionary_strategy_1``. 
-It seems to me that a low percentage corresponds to prefer the first rows and a high percentage corresponds to prefer the last rows. 
-
-I'd like to divide my review into two parts corresponding on your two strategies:
-- ``evolutionary_strategy_1`` and ``evolve_1``
-- ``evolutionary_strategy_2`` and ``evolve_2``
+**[Peer review](https://github.com/HerryTheBest/Polito---Computational-Intelligence/issues/2) for Lab 2 of [Luca Sturaro s320062](https://github.com/HerryTheBest/Polito---Computational-Intelligence/tree/main/Lab_2)**
 
 
-## Relative position strategy
-Firstly, In ``evolutionary_strategy_1`` I think that's simply a typo. You never use the parameter that indicates how many elements from that row to take.
-```python
-num_objects = ceil(choice_parameters[0] / 100 * state.rows[row])
-```
+> Hi Luca ✌️.
+> 
+> First of all, it would have been easier to evaluate the code if the README.md file had included some information about
+> your ES. For example, describe the association between the percentage parameter and the choice of row in ``evolutionary_strategy_1``. 
+> It seems to me that a low percentage corresponds to prefer the first rows and a high percentage corresponds to prefer the last rows. 
+> 
+> I'd like to divide my review into two parts corresponding on your two strategies:
+> - ``evolutionary_strategy_1`` and ``evolve_1``
+> - ``evolutionary_strategy_2`` and ``evolve_2``
+>
+> ### Relative position strategy
+> Firstly, In ``evolutionary_strategy_1`` I think that's simply a typo. You never use the parameter that indicates how many elements from that row to take.
+> ```python
+> num_objects = ceil(choice_parameters[0] / 100 * state.rows[row])
+> ```
+> 
+> In this solution, if I understand correctly, there is only an individual in the population that is ``ev_parameters``.
+> This individual plays with the optimal strategy and, depending on the number of wins, it can become the ``best_ev_parameters``.
+> After that, you apply a mutation on that individual and the cycle starts again.
+> 
+> I personally implement a similar solution, where an individual is evaluated by testing him against the optimal algorithm.
+> However, the problem with your solution is that that's not an ES. Without a population and a parent selection, you are doing
+> a local search, and so you might get stuck in a local optimum.
+> 
+> ### Ideal Nim-sum strategy
+> For this implementation, you used the nim-sum as fitness, although I don't think it's a correct evolution strategy (assuming I understood your intentions).
+> The process involves generating an offspring, in the ``evolutionary_strategy_2`` function, and verify the fitness for every individual creates, one by one.
+> This offspring, composed of moves, determines the best move to execute based on the nim-sum value as the fitness criterion. A smaller nim-sum indicates a superior move.
+> This approach ensures that the only real-valued parameter undergoing training is the variable ``ev_parameter``.
+> 
+> I expected you to develop an agent with the ability to play independently, eliminating the necessity to generate an offspring solely for executing a single move.
+> 
+> ### Ending
+> I hope you'll find this review useful and good luck for the next labs 😉!
 
-In this solution, if I understand correctly, there is only an individual in the population that is ``ev_parameters``.
-This individual plays with the optimal strategy and, depending on the number of wins, it can become the ``best_ev_parameters``.
-After that, you apply a mutation on that individual and the cycle starts again.
+**[Peer review](https://github.com/AlessioCappello2/computational-intelligence/issues/2) for Lab 2 of [Alessio Cappello s309450](https://github.com/AlessioCappello2/computational-intelligence/tree/main/labs)**
 
-I personally implement a similar solution, where an individual is evaluated by testing him against the optimal algorithm.
-However, the problem with your solution is that that's not an ES. Without a population and a parent selection, you are doing
-a local search, and so you might get stuck in a local optimum.
+> Hi Alessio ✌️.
+> 
+> Firstly, good work👍🏻! The ``README.md`` is very well written and therefore was beneficial for quickly understanding your work.
+> I also really appreciated your code style since it is very clear.
+> 
+> ### The code
+> 
+> I hadn't thought about the choice of playing the algorithm against ``pure_random``, assuming that the best choice was to send it against the optimal. 
+> However, I must say that the results look very good even with ``pure_random``. I will definitely try to see if in my solution anything changes.
+> 
+> The only thing I recommend changing is the ``fitness`` function as your algorithm always starts first against pure_random.
+> It would be better if there was fairness between the algorithms in the number of times one of them starts playing.
+> By the way, I also realized this thanks to the reviews😅.
+>
+> ### Ending
+> After all, that's a great job. Congratulations!.
+> I hope you'll find this review useful and good luck for the next labs 😉!
 
-## Ideal Nim-sum strategy
-For this implementation, you used the nim-sum as fitness, although I don't think it's a correct evolution strategy (assuming I understood your intentions).
-The process involves generating an offspring, in the ``evolutionary_strategy_2`` function, and verify the fitness for every individual creates, one by one.
-This offspring, composed of moves, determines the best move to execute based on the nim-sum value as the fitness criterion. A smaller nim-sum indicates a superior move.
-This approach ensures that the only real-valued parameter undergoing training is the variable ``ev_parameter``.
+### Received
 
-I expected you to develop an agent with the ability to play independently, eliminating the necessity to generate an offspring solely for executing a single move.
+**[Peer review](https://github.com/Riden15/Computational-Intelligence/issues/1) for Lab 2 received by [Luca Sturaro s320062](https://github.com/HerryTheBest/Polito---Computational-Intelligence)**
 
-## Ending
-I hope you'll find this review useful and good luck for the next labs!
+> ### Intro
+> As a general note, the code is well laid out and the comments make it quite straight forward to follow, only the make_move function in the NimAgent class could have used some more clarification for how the choice is actually made.
+>
+> ### Output
+> While it clearly would not have been feasible to display the entire population at the end of every cycle, maybe you could have shown the best individual, to show the progressive evolution, together > with the win rate (not necessary but it would have given a better visual rapresentation in my opinion).
+> 
+> ### make_move function
+> I only have one real issue with the code which stems from the way individuals are made up of probabilities of operating on each row, but no parameter exists to decide how many elements to take from > each row (its determined as a function of the row itself).
+>
+> Because of this, the algorithm looses a degree of freedom, where it may be optimal to take some elements from a row and then move on to the next one.
+> This cannot be done as the individual will always choose the row with the highest probability, regardless of how many elements are left in it, thus it will always prioritize to drain the preferred row before moving to the next.
+>
+> I belive adding some parameter to each individual to decide the number of elements to take independently of the row might lead to better results.
+> 
+> ### Conclusion
+> I hope you'll find these comments helpful.
 
+**[Peer review](https://github.com/Riden15/Computational-Intelligence/issues/2) for Lab 2 received by [Lorenzo Ugoccioni s315734](https://github.com/LorenzoUgo/Computational_Intelligence)**
+
+> Hi Riccardo,
+> 
+> The ReadME is very simple and easy to understand to get an overview of the algorithm right away.
+> Instead, the comments throughout the code help so much in understanding the various cells,: the code is well organized.
+>
+> For what I was able to understand, your genome is composed of the probabilities of choosing or not choosing a particular row. Wouldn't it be better to normalize the various values so that the sum of all probabilities is 1?
+>
+>That said, given that throughout the development of the algorithm you also get to win more than 60 % of games against the optimal, I think the definition of the move and its choice are really effective.
+>
+> Enjoy Lab9.
