@@ -9,6 +9,9 @@ import numpy as np
 
 
 class Move(Enum):
+    """
+    Selects where you want to place the taken piece. The rest of the pieces are shifted
+    """
     TOP = 0
     BOTTOM = 1
     LEFT = 2
@@ -17,15 +20,18 @@ class Move(Enum):
 
 class Player(ABC):
     def __init__(self) -> None:
-        '''You can change this for your player if you need to handle state/have memory'''
+        """You can change this for your player if you need to handle state/have memory"""
         pass
 
     @abstractmethod
     def choose_action(self, game: 'Game') -> tuple[tuple[int, int], Move]:
-        '''
+        """
+        The game accepts coordinates of the type (X, Y). X goes from left to right, while Y goes from top to bottom, as in 2D graphics.
+        Thus, the coordinates that this method returns shall be in the (X, Y) format.
+
         game: the Quixo game. You can use it to override the current game with yours, but everything is evaluated by the main game
         return values: this method shall return a tuple of X,Y positions and a move among TOP, BOTTOM, LEFT and RIGHT
-        '''
+        """
         pass
 
     @abstractmethod
@@ -45,14 +51,10 @@ class Game(object):
         return deepcopy(self._board)
 
     def set_board(self, b):
+        """
+        Set the board
+        """
         self._board = b
-
-    def get_hash_board(self):
-        return str(self._board.reshape(5 * 5))
-
-    def convert_matrix_board_to_tuple(self, board):
-        current_board = tuple(tuple(riga) for riga in board)
-        return current_board
 
     def get_current_player(self) -> int:
         """
@@ -61,80 +63,19 @@ class Game(object):
         return deepcopy(self.current_player)
 
     def switch_player(self):
+        """
+        Switch the current player
+        """
         if self.current_player == 1:
             self.current_player = 0
         else:
             self.current_player = 1
 
     def reset(self):
+        """
+        Reset the board
+        """
         self._board = np.ones((5, 5), dtype=np.uint8) * -1
-
-    def print(self) -> None:
-        """
-        Print the table in a pretty way.
-        """
-        # define a board for pretty printing
-        id_to_block = {-1: '⬜️', 0: '❌', 1: '⭕️'}
-        fancy_board = np.chararray(self._board.shape, itemsize=1, unicode=True)
-        for i in range(fancy_board.shape[0]):
-            for j in range(fancy_board.shape[1]):
-                # fill the fancy board
-                fancy_board[(i, j)] = id_to_block[self._board[(i, j)]]
-        print(fancy_board)
-
-    def get_possible_moves(self, player):
-        # possible moves:
-        # - take border empty and fill the hole by moving in the 3 directions
-        # - take one of your blocks on the border and fill the hole by moving in the 3 directions
-        # 44 at start possible moves
-        pos = set()
-        for r in [0, 4]:
-            for c in range(5):
-                if self._board[r, c] == -1 or self._board[r, c] == player:
-                    if r == 0 and c == 0:  # OK
-                        pos.add(((c, r), Move.BOTTOM))
-                        pos.add(((c, r), Move.RIGHT))
-                    elif r == 0 and c == 4:  # OK
-                        pos.add(((c, r), Move.BOTTOM))
-                        pos.add(((c, r), Move.LEFT))
-                    elif r == 4 and c == 0:  # OK
-                        pos.add(((c, r), Move.TOP))
-                        pos.add(((c, r), Move.RIGHT))
-                    elif r == 4 and c == 4:  # OK
-                        pos.add(((c, r), Move.TOP))
-                        pos.add(((c, r), Move.LEFT))
-                    elif r == 0:  # OK
-                        pos.add(((c, r), Move.BOTTOM))
-                        pos.add(((c, r), Move.LEFT))
-                        pos.add(((c, r), Move.RIGHT))
-                    elif r == 4:  # OK
-                        pos.add(((c, r), Move.TOP))
-                        pos.add(((c, r), Move.LEFT))
-                        pos.add(((c, r), Move.RIGHT))
-        for c in [0, 4]:
-            for r in range(5):
-                if self._board[r, c] == -1 or self._board[r, c] == player:
-                    if r == 0 and c == 0:  # OK
-                        pos.add(((c, r), Move.BOTTOM))
-                        pos.add(((c, r), Move.RIGHT))
-                    elif r == 0 and c == 4:  # OK
-                        pos.add(((c, r), Move.BOTTOM))
-                        pos.add(((c, r), Move.LEFT))
-                    elif r == 4 and c == 0:  # OK
-                        pos.add(((c, r), Move.TOP))
-                        pos.add(((c, r), Move.RIGHT))
-                    elif r == 4 and c == 4:  # OK
-                        pos.add(((c, r), Move.TOP))
-                        pos.add(((c, r), Move.LEFT))
-                    elif c == 0:
-                        pos.add(((c, r), Move.TOP))
-                        pos.add(((c, r), Move.RIGHT))
-                        pos.add(((c, r), Move.BOTTOM))
-                    elif c == 4:
-                        pos.add(((c, r), Move.TOP))
-                        pos.add(((c, r), Move.LEFT))
-                        pos.add(((c, r), Move.BOTTOM))
-        return list(pos)
 
     def print(self):
         '''Prints the board. -1 are neutral pieces, 0 are pieces of player 0, 1 pieces of player 1'''
