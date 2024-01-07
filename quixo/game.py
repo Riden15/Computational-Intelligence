@@ -69,6 +69,19 @@ class Game(object):
     def reset(self):
         self._board = np.ones((5, 5), dtype=np.uint8) * -1
 
+    def print(self) -> None:
+        """
+        Print the table in a pretty way.
+        """
+        # define a board for pretty printing
+        id_to_block = {-1: '⬜️', 0: '❌', 1: '⭕️'}
+        fancy_board = np.chararray(self._board.shape, itemsize=1, unicode=True)
+        for i in range(fancy_board.shape[0]):
+            for j in range(fancy_board.shape[1]):
+                # fill the fancy board
+                fancy_board[(i, j)] = id_to_block[self._board[(i, j)]]
+        print(fancy_board)
+
     def get_possible_moves(self, player):
         # possible moves:
         # - take border empty and fill the hole by moving in the 3 directions
@@ -157,7 +170,7 @@ class Game(object):
             return self._board[0, -1]
         return -1
 
-    def play(self, player1: Player, player2: Player) -> int:
+    def play(self, player1: Player, player2: Player, print_flag: bool = False) -> int:
         """Play the game. Returns the winning player"""
         players = [player1, player2]
         self.current_player = 1
@@ -166,9 +179,12 @@ class Game(object):
             self.current_player += 1
             self.current_player %= len(players)
             ok = False
+            if print_flag:
+                self.print()
             while not ok:
                 # from_pos is the position, for example [0,3]
                 # slide is one element of Move (top,left...)
+
                 from_pos, slide = players[self.current_player].choose_action(self)
                 ok = self.make_move(from_pos, slide)
             winner = self.check_winner()
